@@ -29,3 +29,8 @@ Esta aplicación web permite a los usuarios gestionar flujos básicos de dinero.
 3. Para ingresar, utiliza las siguientes credenciales de prueba:
    - **Correo**: `test@gmail.com`
    - **Contraseña**: `123456`
+
+## Link de prueba GITHUB
+
+1. Dejo adjunto el link de prueba para ver funcionando la pagina publicada en github.
+https://github.com/Benyaaki/Alke.Wallet
