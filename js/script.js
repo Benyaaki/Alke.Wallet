@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Inicializar saldo si no existe
     if (!localStorage.getItem('walletBalance')) {
-        localStorage.setItem('walletBalance', '5000'); // Saldo inicial
+        localStorage.setItem('walletBalance', '5000');
     }
 
-    // Actualizar visualización del saldo al cargar la página
     updateBalanceDisplay();
 
-    // Validación del formulario de inicio de sesión
-    const loginForm = document.querySelector('form[action="menu.html"]'); // Selector basado en el login.html actual
+    const loginForm = document.querySelector('form[action="menu.html"]');
     if (loginForm) {
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -23,8 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Lógica de depósito
-    const depositButton = document.querySelector('button.btn-success'); // Específico para deposit.html
+    const depositButton = document.querySelector('button.btn-success');
     if (depositButton) {
         depositButton.addEventListener('click', function () {
             const amountInput = document.getElementById('amount');
@@ -35,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentBalance += amount;
                 localStorage.setItem('walletBalance', currentBalance);
 
-                // Guardar transacción
                 saveTransaction('Depósito', amount, 'credit');
 
                 alert('Depósito realizado con éxito. Nuevo saldo: $' + currentBalance);
@@ -47,8 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Lógica de enviar dinero
-    const transferButton = document.querySelector('button.btn-info'); // Específico para sendmoney.html
+    const transferButton = document.querySelector('button.btn-info');
     if (transferButton) {
         transferButton.addEventListener('click', function () {
             const amountInput = document.getElementById('amount');
@@ -68,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentBalance -= amount;
                     localStorage.setItem('walletBalance', currentBalance);
 
-                    // Guardar transacción
                     saveTransaction('Transferencia a ' + contactName, amount, 'debit');
 
                     alert('Transferencia exitosa a ' + contactName + '. Nuevo saldo: $' + currentBalance);
@@ -83,13 +76,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Cargar transacciones si estamos en la página de movimientos
     loadTransactions();
 });
 
 function saveTransaction(description, amount, type) {
     let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-    const date = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const date = new Date().toISOString().split('T')[0];
 
     transactions.push({
         date: date,
@@ -98,7 +90,6 @@ function saveTransaction(description, amount, type) {
         type: type
     });
 
-    // Mantener solo los últimos 10 movimientos (opcional, pero buena práctica)
     if (transactions.length > 10) {
         transactions.shift();
     }
@@ -110,14 +101,13 @@ function loadTransactions() {
     const tableBody = document.getElementById('transactions-body');
     if (tableBody) {
         const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        tableBody.innerHTML = ''; // Limpiar contenido existente
+        tableBody.innerHTML = '';
 
         if (transactions.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="3" class="text-center">No hay movimientos recientes</td></tr>';
             return;
         }
 
-        // Mostrar las más recientes primero
         transactions.reverse().forEach(t => {
             const row = document.createElement('tr');
             const amountClass = t.type === 'credit' ? 'text-success' : 'text-danger';
@@ -136,8 +126,6 @@ function loadTransactions() {
 function updateBalanceDisplay() {
     const balanceElement = document.getElementById('balance-container');
     if (balanceElement) {
-        // Verificar si es la página del menú (con "Calculando..." o estructura específica)
-        // O si está dentro del cuerpo de la tarjeta
         let displayElement = balanceElement.querySelector('p.display-6') || balanceElement.querySelector('p');
         if (!displayElement && balanceElement.tagName === 'P') {
             displayElement = balanceElement;
@@ -146,18 +134,15 @@ function updateBalanceDisplay() {
         if (displayElement) {
             const balance = localStorage.getItem('walletBalance');
             displayElement.textContent = '$' + balance;
-            displayElement.classList.remove('text-success', 'text-danger'); // Restablecer color si es necesario
+            displayElement.classList.remove('text-success', 'text-danger');
             displayElement.classList.add('text-success');
         }
     }
 }
 
-// Mejoras con jQuery
 $(document).ready(function () {
-    // Desvanecer el contenido principal al cargar
     $('main').hide().fadeIn(1000);
 
-    // Animación de actualización dinámica del saldo
     const originalUpdateBalance = window.updateBalanceDisplay;
     window.updateBalanceDisplay = function () {
         const balanceElement = $('#balance-container p');
@@ -168,7 +153,6 @@ $(document).ready(function () {
         });
     };
 
-    // Búsqueda de contactos / Autocompletado
     $('#contact-search').on('keyup', function () {
         const value = $(this).val().toLowerCase();
         $('#contact-list li').filter(function () {
@@ -176,15 +160,12 @@ $(document).ready(function () {
         });
     });
 
-    // Seleccionar contacto de la lista para llenar el cuadro de selección
     $('#contact-list li').click(function () {
         const contactName = $(this).contents().get(0).nodeValue.trim();
-        // Mapeo simple o búsqueda de opción por texto
         $('#contact option').filter(function () {
-            return $(this).text().includes(contactName.split(' ')[0]); // Coincide con el primer nombre por simplicidad
+            return $(this).text().includes(contactName.split(' ')[0]);
         }).prop('selected', true);
 
-        // Resaltar seleccionado
         $('#contact-list li').removeClass('active');
         $(this).addClass('active');
     });
