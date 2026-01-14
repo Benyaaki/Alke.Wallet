@@ -1,6 +1,7 @@
 # Alke Wallet
 
-Proyecto de evaluación para el Módulo 2. Es una simulación de una billetera virtual (E-wallet) desarrollada con tecnologías web estándar.
+Proyecto de evaluación para el Módulo 2. 
+Es una simulación de una billetera virtual.
 
 ## Descripción
 
